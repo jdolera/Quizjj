@@ -15,7 +15,7 @@
   <body>
   <div id="page-wrap">
     <header class="main" id="h1" >
-      <h2>Quizjj: el juego de las preguntas</h2>
+      <h2><span>Quizjj: el juego de las preguntas</span></h2>
     </header>
 
     <nav class="main" id="n1" role="navigation">
@@ -24,8 +24,16 @@
       <span><a href="/author">Creditos</a></span>
     </nav>
 
-    <section>
-      <%- body%>
+    <section class="main" id="s1">
+      <% if (errors.length) { %>
+        <span id='ErrorMsgs'>
+          Ey, corregir errores: <br/>
+          <% for (var i in errors) { %>
+            <span> <%= errors[i].message %> </span><br/>
+      <%    } %>
+      </span>
+      <%  }   %>
+      <div><%- body%></div>
     </section>
 
     <footer class="main" id="f1">
