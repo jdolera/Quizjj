@@ -1,6 +1,19 @@
 <label for="preg" class="rem">Pregunta:</label>
 <input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>"/> <p>
+
 <label for="resp" class="rem">Respuesta:</label>
 <input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>"/> <p>
+
+<label for="tem" class="rem">Tema:</label>
+<% var valsel = {Otro: '', Humanidades: '', Ocio: '', Ciencia: '', Tecnologia: ''} %>
+<% valsel[quiz.tema] = 'selected' %>
+<select name="quiz[tema]">
+  <option value="Otro" <%= valsel['Otro'] %> >Otro</option>
+  <option value="Humanidades" <%= valsel['Humanidades'] %> >Humanidades</option>
+  <option value="Ocio" <%= valsel['Ocio'] %> >Ocio</option>
+  <option value="Ciencia" <%= valsel['Ciencia'] %> >Ciencia</option>
+  <option value="Tecnologia" <%= valsel['Tecnologia'] %> >Tecnología</option>
+</select> <p>
+
 <a href="/quizes"><button type="button">Cancelar</button></a>
 <input type="submit" value="Salvar">
