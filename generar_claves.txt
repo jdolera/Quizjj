@@ -1,0 +1,5 @@
+mkdir certs
+cd certs
+openssl genrsa -out jjquiz2015-key.pem 2048
+openssl req -new -sha256 -key jjquiz2015-key.pem -out jjquiz2015-csr.pem
+openssl x509 -req -in jjquiz2015-csr.pem -signkey jjquiz2015-key.pem -out jjquiz2015-cert.pem
