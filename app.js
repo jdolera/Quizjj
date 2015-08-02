@@ -27,14 +27,31 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Util
 app.use(function(req,res, next){
-  // guardar ruta de vuelta login/logout
-  if (!req.path.match(/\/login|\/logout/)){
+  if (!req.path.match(/\/login|\/logout/)){ // guardar ruta de vuelta login/logout
     req.session.redir = req.path;
   }
-  // hacer visible la sesión
-  res.locals.session = req.session;
+  res.locals.session = req.session; // hacer visible la sesión
+  // cazar el tiempo
   next();
+});
+
+// Control de expiración de tiempo de sesión
+// La sesión se define por la existencia de req.session.user
+// Si pasan más de 2*60000 milisegundos desde la ultima vez, entonces
+// hacer logout y volver a path anterior a login
+app.use(function (req, res, next){
+  if (req.session.user) {
+    var tiempo = 0;
+    if (req.session.tiempo) {tiempo = new Date - req.session.tiempo;}
+    req.session.tiempo = new Date - 0;
+    if (tiempo > 120000){
+      delete req.session.tiempo;
+      delete req.session.user;
+      res.redirect(req.session.redir.toString());
+    } else next(); // continuar
+  } else next();
 });
 
 app.use('/', routes);
@@ -71,6 +88,5 @@ app.use(function(err, req, res, next) {
         errors: []
     });
 });
-
 
 module.exports = app;
