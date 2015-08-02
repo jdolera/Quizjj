@@ -15,10 +15,27 @@ exports.load = function(req, res, next, quizId) {
 };
 
 // Get /quizes
+// si viene search en el query, filtra por él
 exports.index = function(req, res) {
-  models.Quiz.findAll().then(function(quizes){
-    res.render('quizes/index.ejs', {quizes: quizes, errors: []});
-  }).catch(function(error) {next(error);})
+  if (req.query.search){
+    var ponparen = function(cadin){
+      var cadout = "%";
+      for (var i = 0; i < cadin.length; i++)
+        if (cadin[i] === " ") cadout += "%"; else cadout += cadin[i];
+      cadout += "%";
+      return cadout;
+    };
+    var filtro = ponparen (req.query.search);
+    models.Quiz.findAll(
+      {where: ["pregunta like ?", filtro]}
+    ).then(function(quizes){
+      res.render('quizes/index.ejs', {quizes: quizes, errors: []});
+    }).catch(function(error) {next(error);});
+  } else {
+    models.Quiz.findAll().then(function(quizes){
+      res.render('quizes/index.ejs', {quizes: quizes, errors: []});
+    }).catch(function(error) {next(error);});
+  };
 };
 
 // Get /quizes/:id
